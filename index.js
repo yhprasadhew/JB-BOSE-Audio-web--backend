@@ -2,6 +2,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productsRoute.js";
@@ -42,8 +45,7 @@ const authMiddleware = (req, res, next) => {
 app.use(authMiddleware);
 
 // ================= DATABASE =================
-const mongoUrl =
-  "mongodb://prasad:prasad123@ac-g0v2ekg-shard-00-00.kv7r1dv.mongodb.net:27017,ac-g0v2ekg-shard-00-01.kv7r1dv.mongodb.net:27017,ac-g0v2ekg-shard-00-02.kv7r1dv.mongodb.net:27017/?ssl=true&replicaSet=atlas-xety7u-shard-0&authSource=admin&appName=Cluster0";
+const mongoUrl =process.env.MONGO_URL ;
 
 mongoose
   .connect(mongoUrl)
