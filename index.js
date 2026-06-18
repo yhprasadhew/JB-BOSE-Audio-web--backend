@@ -1,0 +1,64 @@
+import express from "express";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+
+import userRouter from "./routes/userRoutes.js";
+import productRouter from "./routes/productsRoute.js";
+
+const app = express();
+
+// ================= MIDDLEWARE =================
+app.use(bodyParser.json());
+
+// ================= JWT MIDDLEWARE =================
+const authMiddleware = (req, res, next) => {
+  const authHeader = req.header("Authorization");
+
+  if (!authHeader) {
+    return next();
+  }
+
+  const token = authHeader.replace("Bearer ", "");
+
+  jwt.verify(token, "prasadjwt-123", (err, decoded) => {
+    if (err) {
+      console.log("❌ Invalid Token");
+      return res.status(401).json({
+        message: "Invalid token",
+      });
+    }
+
+    // ✅ SHOW IN TERMINAL
+    console.log("🔐 Decoded User:", decoded);
+
+    // store user in request
+    req.user = decoded;
+
+    next();
+  });
+};
+
+app.use(authMiddleware);
+
+// ================= DATABASE =================
+const mongoUrl =
+  "mongodb://prasad:prasad123@ac-g0v2ekg-shard-00-00.kv7r1dv.mongodb.net:27017,ac-g0v2ekg-shard-00-01.kv7r1dv.mongodb.net:27017,ac-g0v2ekg-shard-00-02.kv7r1dv.mongodb.net:27017/?ssl=true&replicaSet=atlas-xety7u-shard-0&authSource=admin&appName=Cluster0";
+
+mongoose
+  .connect(mongoUrl)
+  .then(() => {
+    console.log("MongoDB connected successfully ✅");
+  })
+  .catch((err) => {
+    console.error("MongoDB Error:", err);
+  });
+
+// ================= ROUTES =================
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
+
+// ================= SERVER =================
+app.listen(3000, () => {
+  console.log("Server is running on port 3000 🚀");
+});
