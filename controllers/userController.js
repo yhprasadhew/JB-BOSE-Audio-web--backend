@@ -56,7 +56,7 @@ export function loginUser(req, res) {
           email: user.email,
           role: user.role,
         },
-        "prasadjwt-123"
+        process.env.JWT_SECRET
       );
 
       res.json({

@@ -24,7 +24,7 @@ const authMiddleware = (req, res, next) => {
 
   const token = authHeader.replace("Bearer ", "");
 
-  jwt.verify(token, "prasadjwt-123", (err, decoded) => {
+  jwt.verify(token,process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       console.log("❌ Invalid Token");
       return res.status(401).json({
