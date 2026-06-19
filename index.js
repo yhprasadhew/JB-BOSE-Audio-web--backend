@@ -3,11 +3,11 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
-dotenv.config();
-
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productsRoute.js";
+import reviewRouter from "./routes/reviewRoute.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -59,9 +59,18 @@ mongoose
 // ================= ROUTES =================
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/reviews", reviewRouter)
 
 // ================= SERVER =================
 app.listen(3000, () => {
   console.log("Server is running on port 3000 🚀");
 });
-//
+
+
+// "email": "dud@gmail.com",
+ // "password": "prasad123",
+ // "role": "customer",
+
+ //"email": "dud6@gmail.com",
+ // "password": "prasad123",
+ // "role": "admin",

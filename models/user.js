@@ -38,6 +38,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    profilePicture :{
+        type: String,
+      required: true,
+      default : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmyS4TygDepDH2AezAFSACrY7V3HuBaXl_Zq7E0d5jD-QW-7ZjPaV1KNY&s=10"
+
+    }
   },
   {
     timestamps: true,
