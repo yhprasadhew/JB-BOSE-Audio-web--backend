@@ -65,6 +65,7 @@ app.use("/api/reviews", reviewRouter);
 app.use("/api/inquiry",inquiryRouter);
 
 
+
 // ================= SERVER =================
 app.listen(3000, () => {
   console.log("Server is running on port 3000 🚀");
