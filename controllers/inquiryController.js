@@ -25,7 +25,7 @@ export async function addInquiry(req, res) {
 
     return res.status(201).json({
       message: "Inquiry created successfully",
-      inquiry: newInquiry,
+      
     });
 
   } catch (error) {
