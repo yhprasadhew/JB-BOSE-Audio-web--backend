@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productsRoute.js";
 import reviewRouter from "./routes/reviewRoute.js";
+import inquiryRouter from "./routes/inquiryRoutes.js";
 
 dotenv.config();
 
@@ -59,7 +60,10 @@ mongoose
 // ================= ROUTES =================
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
-app.use("/api/reviews", reviewRouter)
+app.use("/api/reviews", reviewRouter);
+
+app.use("/api/inquiry",inquiryRouter);
+
 
 // ================= SERVER =================
 app.listen(3000, () => {
