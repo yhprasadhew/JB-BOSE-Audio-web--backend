@@ -43,6 +43,12 @@ const productSchema = new mongoose.Schema(
         type: [String],
         required:true,
         default: ["https://thumbs.dreamstime.com/b/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available-236105299.jpg"]
+    },
+    type: {
+      type: String,
+      required: true,
+      default: "sale",
+      enum: ["sale", "rental"],
     }
   },
   {

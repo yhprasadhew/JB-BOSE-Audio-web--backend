@@ -37,6 +37,22 @@ const inquirySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    productKey: {
+      type: String,
+      required: true,
+    },
+
+    itemName: {
+      type: String,
+      required: true,
+    },
+
+    status: {
+      type: String,
+      default: "pending",
+      enum: ["pending", "approved", "rejected"],
+    },
   },
   {
     timestamps: true,
