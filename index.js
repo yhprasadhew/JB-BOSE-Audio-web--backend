@@ -8,11 +8,14 @@ import productRouter from "./routes/productsRoute.js";
 import reviewRouter from "./routes/reviewRoute.js";
 import inquiryRouter from "./routes/inquiryRoutes.js";
 
+import cors from "cors"
+
 dotenv.config();
 
 const app = express();
 
 // ================= MIDDLEWARE =================
+app.use(cors());
 app.use(bodyParser.json());
 
 // ================= JWT MIDDLEWARE =================
