@@ -84,3 +84,46 @@ export function isItCustomer(req){
     }
     return isCustomer ;
 }
+
+export function updateProfile(req, res) {
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const { firstName, lastName, phone, address, profilePicture } = req.body;
+
+  User.findOneAndUpdate(
+    { email: req.user.email },
+    { firstName, lastName, phone, address, profilePicture },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Generate a new token with updated information
+      const newToken = jwt.sign(
+        {
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+          role: updatedUser.role,
+          profilePicture: updatedUser.profilePicture,
+          phone: updatedUser.phone
+        },
+        process.env.JWT_SECRET
+      );
+
+      res.json({
+        message: "Profile updated successfully",
+        token: newToken,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: "Failed to update profile",
+        error: error.message,
+      });
+    });
+}
