@@ -53,6 +53,21 @@ const inquirySchema = new mongoose.Schema(
       default: "pending",
       enum: ["pending", "approved", "rejected"],
     },
+
+    startDate: {
+      type: Date,
+      required: false,
+    },
+
+    endDate: {
+      type: Date,
+      required: false,
+    },
+
+    totalCost: {
+      type: Number,
+      required: false,
+    },
   },
   {
     timestamps: true,

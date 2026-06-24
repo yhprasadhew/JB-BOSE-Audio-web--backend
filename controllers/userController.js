@@ -38,6 +38,12 @@ export function loginUser(req, res) {
         });
       }
 
+      if (user.isSuspended) {
+        return res.status(403).json({
+          message: "Your account has been suspended. Please contact support. ❌",
+        });
+      }
+
       const isPasswordCorrect = bcrypt.compareSync(
         data.password,
         user.password
@@ -125,5 +131,73 @@ export function updateProfile(req, res) {
         message: "Failed to update profile",
         error: error.message,
       });
+    });
+}
+
+export function getUsers(req, res) {
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  User.find({}, { password: 0 })
+    .then((users) => {
+      res.json(users);
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Failed to fetch users", error: error.message });
+    });
+}
+
+export function deleteUser(req, res) {
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const email = req.params.email;
+
+  if (email === req.user.email) {
+    return res.status(400).json({ message: "You cannot delete your own admin account!" });
+  }
+
+  User.findOneAndDelete({ email })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json({ message: "User deleted successfully" });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Failed to delete user", error: error.message });
+    });
+}
+
+export function toggleSuspendUser(req, res) {
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const email = req.params.email;
+
+  if (email === req.user.email) {
+    return res.status(400).json({ message: "You cannot suspend your own admin account!" });
+  }
+
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      user.isSuspended = !user.isSuspended;
+      return user.save();
+    })
+    .then((updatedUser) => {
+      res.json({
+        message: `User account has been ${updatedUser.isSuspended ? "suspended" : "activated"} successfully`,
+        user: updatedUser,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Failed to update suspension status", error: error.message });
     });
 }
